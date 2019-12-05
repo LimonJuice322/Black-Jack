@@ -1,0 +1,21 @@
+.btn {
+  margin: 1px 100px 5px 100px;
+}
+
+.dealer-hand {
+  border: 1px solid green;
+  margin: 10px;
+}
+
+.user-hand {
+  border: 1px solid blue;
+  margin: 30px 10px 10px 10px;
+}
+
+.user-score {
+  margin-right: 10px;
+}
+
+.dealer-score {
+  margin-right: 10px;
+}
