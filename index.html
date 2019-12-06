@@ -6,12 +6,14 @@
     <title></title>
   </head>
   <body>
-    <div class="user-hand">Player:</div>
-    <div class="user-score"></div>
-    <div class="dealer-hand">Dealer:</div>
-    <div class="dealer-score"></div>
-    <input class="create-form" type="button" onclick="getCard()" value="Take card">
-    <input class="create-form" type="button" onclick="check(win_lose, new_game)" value="Stand">
+    <main>
+      <div class="dealer-hand">Dealer:</div>
+      <div class="dealer-score"></div>
+      <div class="btn" onclick="getCard()">Take card</div>
+      <div class="btn" onclick="check(win_lose, new_game)">Stand</div>
+      <div class="user-hand">Player:</div>
+      <div class="user-score"></div>
+    </main>
   </body>
   <script src="logic.js">
   </script>

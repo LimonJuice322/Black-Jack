@@ -161,6 +161,6 @@ function new_game() {
   dealer.hand.push(card);
   document.querySelector('.dealer-hand').textContent += ` ${card.name}`;
   document.querySelector('.dealer-score').textContent = `Score: ${dealer.get_score()}`;
-  // Player's score
+  // Player's score (set "zero")
   document.querySelector('.user-score').textContent = `Score: ${user.get_score()}`;
 }

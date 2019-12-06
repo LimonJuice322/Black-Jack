@@ -1,21 +1,52 @@
+body {
+  background-image: url('img/cas.png');
+}
+
+main {
+  width: 300px;
+  height: 250px;
+  margin: auto;
+  border: 1px solid black;
+  border-radius: 5%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
 .btn {
-  margin: 1px 100px 5px 100px;
+  padding: 10px;
+  display: inline-block;
+  margin-left: 40px;
+  margin-bottom: 30px;
+  border: 2px solid red;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.btn:hover {
+  color: white;
+  background-color: red;
+  transition: 0.2s;
 }
 
 .dealer-hand {
+  padding: 5px;
   border: 1px solid green;
+  border-radius: 10px;
   margin: 10px;
 }
 
 .user-hand {
+  padding: 5px;
   border: 1px solid blue;
-  margin: 30px 10px 10px 10px;
+  border-radius: 10px;
+  margin: 10px;
 }
 
 .user-score {
-  margin-right: 10px;
+  margin: 10px;
 }
 
 .dealer-score {
-  margin-right: 10px;
+  margin: 10px;
+  margin-bottom: 30px;
 }
