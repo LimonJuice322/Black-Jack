@@ -89,41 +89,79 @@ class Player {
   }
 }
 
-// Create two player's and deck
-let deck = new OneDeck();
-let user = new Player();
-let dealer = new Player('dealer');
+// Declare variables for user, dealer and deck
+let user, dealer, deck;
 
-// Mix deck
-deck.mix();
+// Start new game
+function new_game() {
+  // Remove 'start game' button
+  document.querySelector('.btn.start').remove();
 
-// First card to dealer
-let card = deck.get_card;
-dealer.hand.push(card);
-document.querySelector('.dealer-hand').textContent += ` ${card.name}`;
-document.querySelector('.dealer-score').textContent = `Score: ${dealer.get_score()}`;
-// Player's score
-document.querySelector('.user-score').textContent = `Score: ${user.get_score()}`;
+  // Create objects for user, dealer and deck
+  deck = new OneDeck();
+  user = new Player();
+  dealer = new Player('dealer');
 
-// Get card handler
-function getCard() {
+  // Mix deck
+  deck.mix();
+
+  // Add 'table' (user's and dealer's hands)
+  document.querySelector('main').insertAdjacentHTML('afterbegin', `
+  <div class="dealer-hand">Dealer:</div>
+  <div class="dealer-score">Score:</div>
+  <div class="user-hand">Player:</div>
+  <div class="user-score">Score:</div>`);
+
+  // Dealing
+  dealing_cards();
+}
+
+
+// Dealing cards
+function dealing_cards() {
+  // Process of dealing cards
+  setTimeout( () => dealer_getCard(), 1000);
+  setTimeout( () => user_getCard(), 2000);
+  setTimeout( () => dealer_getCard(), 3000);
+  setTimeout( () => user_getCard(), 4000);
+
+  // Add button 'take card' and 'stand'
+  setTimeout( () => document.querySelector('.dealer-score').insertAdjacentHTML('afterend', `
+  <div class="btn" onclick="user_getCard()">Take card</div>
+  <div class="btn" onclick="check(dealer_getCard)">Stand</div>`), 5000);
+}
+
+
+// User's 'get card' handler
+function user_getCard() {
   let card = deck.get_card;
   user.hand.push(card);
   document.querySelector('.user-hand').textContent += ` ${card.name}`;
   document.querySelector('.user-score').textContent = `Score: ${user.get_score()}`;
   if (user.get_score() > 21) {
     setTimeout( () => alert('You lose!'), 500);
-    setTimeout( () => new_game(), 2000);
+    setTimeout( () => restart(), 2000);
   }
 }
 
-// Compare function (argument of check() function). p1 - user's score, p2 - dealer's score
+
+// Dealer's 'get card' handler
+function dealer_getCard() {
+  let card = deck.get_card;
+  dealer.hand.push(card);
+  // Dealer's hand and score
+  document.querySelector('.dealer-hand').textContent += ` ${card.name}`;
+  document.querySelector('.dealer-score').textContent = `Score: ${dealer.get_score()}`;
+}
+
+// Compare function. p1 - user's score, p2 - dealer's score
 function win_lose(p1, p2) {
   return (p2 > 21) ? alert('You win!') : (p1 > p2) ? alert('You win!') : (p1 == p2) ? alert('Push') : alert('You lose');
 }
 
-// Check function (simulation of dealer's 'get card' process)
-function check(win_lose, new_game) {
+
+// Check function (simulation of dealer's 'take card' process)
+function check(dealer_getCard) {
   let dealer_score = dealer.get_score();
   let user_score = user.get_score();
   if (dealer_score > user_score)  {
@@ -132,35 +170,26 @@ function check(win_lose, new_game) {
   else {
     // Very simple logic: the dealer stops taking cards after 16 points
     while (dealer_score < 16) {
-      let card = deck.get_card;
-      dealer.hand.push(card);
-      document.querySelector('.dealer-hand').textContent += ` ${card.name}`;
-      document.querySelector('.dealer-score').textContent = `Score: ${dealer.get_score()}`;
+      dealer_getCard();
       dealer_score = dealer.get_score();
     }
     // Return result of game
-    setTimeout(() => win_lose(user_score, dealer_score), 500);
+    setTimeout( () => win_lose(user_score, dealer_score), 500);
   }
   // Start new game
-  return setTimeout( () => new_game(), 2000);
+  return setTimeout( () => restart(), 2000);
 }
 
-// Create new game
-function new_game() {
-  user.hand = [];
-  dealer.hand = [];
 
-  deck = new OneDeck();
+// Restart game
+function restart() {
+  // Remove all table elements
+  let table = document.querySelectorAll('div');
+  for (let el of table) {
+    el.remove();
+  }
 
-  deck.mix();
-
-  document.querySelector('.user-hand').textContent = `Player: `;
-  document.querySelector('.dealer-hand').textContent = `Dealer: `;
-  // First card to dealer
-  let card = deck.get_card;
-  dealer.hand.push(card);
-  document.querySelector('.dealer-hand').textContent += ` ${card.name}`;
-  document.querySelector('.dealer-score').textContent = `Score: ${dealer.get_score()}`;
-  // Player's score (set "zero")
-  document.querySelector('.user-score').textContent = `Score: ${user.get_score()}`;
+  // Add 'start game' button
+   document.querySelector('main').insertAdjacentHTML('afterbegin', `
+   <div class="btn start" onclick="new_game()">Start Game</div>`);
 }
