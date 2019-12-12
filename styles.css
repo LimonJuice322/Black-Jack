@@ -1,10 +1,12 @@
 body {
   background-image: url('img/cas.png');
+  font-family: 'Roboto', sans-serif;
 }
 
 main {
-  width: 300px;
-  height: 250px;
+  position: relative;
+  width: 500px;
+  height: 450px;
   margin: auto;
   border: 1px solid black;
   border-radius: 5%;
@@ -12,19 +14,29 @@ main {
 }
 
 .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 10px;
   display: inline-block;
-  margin-left: 40px;
+  margin: 0;
   border: 2px solid red;
   cursor: pointer;
   background-color: white;
   border-radius: 10px;
 }
 
-.btn.start {
-  width: 75px;
-  display: block;
-  margin: 90px auto;
+.btn.take {
+  top: 50%;
+  left: 25%;
+  transform: translate(-25%, -50%);
+}
+
+.btn.stand {
+  top: 50%;
+  left: 65%;
+  transform: translate(-65%, -50%);
 }
 
 .btn:hover {
@@ -34,6 +46,7 @@ main {
 }
 
 .dealer-hand {
+  height: 90px;
   padding: 5px;
   border: 1px solid green;
   border-radius: 10px;
@@ -41,6 +54,7 @@ main {
 }
 
 .user-hand {
+  height: 90px;
   padding: 5px;
   border: 1px solid blue;
   border-radius: 10px;
@@ -54,5 +68,33 @@ main {
 
 .dealer-score {
   margin: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 165px;
+}
+
+.card {
+  display: inline-block;
+  margin-right: 10px;
+  height: 85px;
+  width: 60px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-image: url('img/suit.png');
+  text-align: center;
+  font-size: 18px;
+}
+
+.card.heart {
+  background-position: 1203px 10px;
+}
+
+.card.diamond {
+  background-position: 405px 10px;
+}
+
+.card.spade {
+  background-position: 5px 10px;
+}
+
+.card.club {
+  background-position: 803px 10px;
 }

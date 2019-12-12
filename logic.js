@@ -95,7 +95,7 @@ let user, dealer, deck;
 // Start new game
 function new_game() {
   // Remove 'start game' button
-  document.querySelector('.btn.start').remove();
+  document.querySelector('.btn').remove();
 
   // Create objects for user, dealer and deck
   deck = new OneDeck();
@@ -126,17 +126,19 @@ function dealing_cards() {
   setTimeout( () => user_getCard(), 4000);
 
   // Add button 'take card' and 'stand'
-  setTimeout( () => document.querySelector('.dealer-score').insertAdjacentHTML('afterend', `
-  <div class="btn" onclick="user_getCard()">Take card</div>
-  <div class="btn" onclick="check(dealer_getCard)">Stand</div>`), 5000);
+  setTimeout( () => document.querySelector('main').insertAdjacentHTML('afterbegin', `
+  <div class="btn take" onclick="user_getCard()">Take card</div>
+  <div class="btn stand" onclick="check(dealer_getCard)">Stand</div>`), 5000);
 }
 
 
 // User's 'get card' handler
 function user_getCard() {
-  let card = deck.get_card;
+  let suit, card = deck.get_card;
+  suit = card.suit;
   user.hand.push(card);
-  document.querySelector('.user-hand').textContent += ` ${card.name}`;
+  document.querySelector('.user-hand').insertAdjacentHTML('beforeend', `
+    <div class="card ${suit}">${card.name}</div>`);
   document.querySelector('.user-score').textContent = `Score: ${user.get_score()}`;
   if (user.get_score() > 21) {
     setTimeout( () => alert('You lose!'), 500);
@@ -147,10 +149,12 @@ function user_getCard() {
 
 // Dealer's 'get card' handler
 function dealer_getCard() {
-  let card = deck.get_card;
+  let suit, card = deck.get_card;
+  suit = card.suit;
   dealer.hand.push(card);
   // Dealer's hand and score
-  document.querySelector('.dealer-hand').textContent += ` ${card.name}`;
+  document.querySelector('.dealer-hand').insertAdjacentHTML('beforeend', `
+    <div class="card ${suit}">${card.name}</div>`);
   document.querySelector('.dealer-score').textContent = `Score: ${dealer.get_score()}`;
 }
 
@@ -174,7 +178,7 @@ function check(dealer_getCard) {
       dealer_score = dealer.get_score();
     }
     // Return result of game
-    setTimeout( () => win_lose(user_score, dealer_score), 500);
+    setTimeout( () => win_lose(user_score, dealer_score), 1500);
   }
   // Start new game
   return setTimeout( () => restart(), 2000);
