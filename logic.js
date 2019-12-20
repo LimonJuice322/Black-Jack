@@ -89,21 +89,20 @@ class Player {
   }
 }
 
-// Declare variables for user, dealer and deck
-let user, dealer, deck;
+// Declare table with user, dealer and deck
+const table = {
+  deck: new OneDeck(),
+  user: new Player(),
+  dealer: new Player('dealer'),
+}
 
 // Start new game
 function new_game() {
   // Remove 'start game' button
   document.querySelector('.btn').remove();
 
-  // Create objects for user, dealer and deck
-  deck = new OneDeck();
-  user = new Player();
-  dealer = new Player('dealer');
-
   // Mix deck
-  deck.mix();
+  table.deck.mix();
 
   // Add 'table' (user's and dealer's hands)
   document.querySelector('main').insertAdjacentHTML('afterbegin', `
@@ -113,34 +112,25 @@ function new_game() {
   <div class="user-score">Score:</div>`);
 
   // Dealing
-  dealing_cards();
-}
-
-
-// Dealing cards
-function dealing_cards() {
-  // Process of dealing cards
-  setTimeout( () => dealer_getCard(), 1000);
-  setTimeout( () => user_getCard(), 2000);
-  setTimeout( () => dealer_getCard(), 3000);
-  setTimeout( () => user_getCard(), 4000);
-
-  // Add button 'take card' and 'stand'
-  setTimeout( () => document.querySelector('main').insertAdjacentHTML('afterbegin', `
-  <div class="btn take" onclick="user_getCard()">Take card</div>
-  <div class="btn stand" onclick="check(dealer_getCard)">Stand</div>`), 5000);
+  let dealing = new Promise( (resolve) => setTimeout( () => resolve(dealer_getCard()), 1000 ) );
+  dealing.then( () => new Promise( (resolve) => setTimeout( () => resolve(user_getCard()), 1000)))
+         .then( () => new Promise( (resolve) => setTimeout( () => resolve(dealer_getCard()), 1000)))
+         .then( () => new Promise( (resolve) => setTimeout( () => resolve(user_getCard()), 1000)))
+         .then( () => new Promise( (resolve) => setTimeout( () => resolve(document.querySelector('main').insertAdjacentHTML('afterbegin', `
+           <div class="btn take" onclick="user_getCard()">Take card</div>
+           <div class="btn stand" onclick="check(dealer_getCard)">Stand</div>`)), 1000)));
 }
 
 
 // User's 'get card' handler
 function user_getCard() {
-  let suit, card = deck.get_card;
+  let suit, card = table.deck.get_card;
   suit = card.suit;
-  user.hand.push(card);
+  table.user.hand.push(card);
   document.querySelector('.user-hand').insertAdjacentHTML('beforeend', `
     <div class="card ${suit}">${card.name}</div>`);
-  document.querySelector('.user-score').textContent = `Score: ${user.get_score()}`;
-  if (user.get_score() > 21) {
+  document.querySelector('.user-score').textContent = `Score: ${table.user.get_score()}`;
+  if (table.user.get_score() > 21) {
     setTimeout( () => alert('You lose!'), 500);
     setTimeout( () => restart(), 2000);
   }
@@ -149,13 +139,13 @@ function user_getCard() {
 
 // Dealer's 'get card' handler
 function dealer_getCard() {
-  let suit, card = deck.get_card;
+  let suit, card = table.deck.get_card;
   suit = card.suit;
-  dealer.hand.push(card);
+  table.dealer.hand.push(card);
   // Dealer's hand and score
   document.querySelector('.dealer-hand').insertAdjacentHTML('beforeend', `
     <div class="card ${suit}">${card.name}</div>`);
-  document.querySelector('.dealer-score').textContent = `Score: ${dealer.get_score()}`;
+  document.querySelector('.dealer-score').textContent = `Score: ${table.dealer.get_score()}`;
 }
 
 // Compare function. p1 - user's score, p2 - dealer's score
@@ -166,8 +156,8 @@ function win_lose(p1, p2) {
 
 // Check function (simulation of dealer's 'take card' process)
 function check(dealer_getCard) {
-  let dealer_score = dealer.get_score();
-  let user_score = user.get_score();
+  let dealer_score = table.dealer.get_score();
+  let user_score = table.user.get_score();
   if (dealer_score > user_score)  {
     setTimeout( () => win_lose(user_score, dealer_score), 500);
   }
@@ -175,7 +165,7 @@ function check(dealer_getCard) {
     // Very simple logic: the dealer stops taking cards after 16 points
     while (dealer_score < 16) {
       dealer_getCard();
-      dealer_score = dealer.get_score();
+      dealer_score = table.dealer.get_score();
     }
     // Return result of game
     setTimeout( () => win_lose(user_score, dealer_score), 1500);
@@ -189,9 +179,7 @@ function check(dealer_getCard) {
 function restart() {
   // Remove all table elements
   let table = document.querySelectorAll('div');
-  for (let el of table) {
-    el.remove();
-  }
+  table.forEach( (elem) => elem.remove());
 
   // Add 'start game' button
    document.querySelector('main').insertAdjacentHTML('afterbegin', `
