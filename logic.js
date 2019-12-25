@@ -120,7 +120,6 @@ function new_game() {
          .then( () => new Promise( (resolve) => setTimeout( () => resolve(document.querySelector('main').insertAdjacentHTML('afterbegin', `
            <div class="btn take" onclick="user_getCard()">Take card</div>
            <div class="btn stand" onclick="check(dealer_getCard)">Stand</div>`)), 1000)))
-         .then( () => new Promise( (resolve) => setTimeout( () => resolve(console.log(table.deck.arr)))))
 }
 
 
